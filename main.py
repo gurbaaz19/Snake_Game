@@ -1,18 +1,21 @@
 import pygame
 import random
+import os
 
 pygame.init()
 
 # Handling High Score if it doesnt exit
-f = open("high_score", "w")
-f.close()
+if not os.path.exists("high_score"):
+    f = open("high_score", "w")
+    f.write("0")
+    f.close()
 
 # Colors
-white = (255, 255, 255)
 red = (255, 0, 0)
 black = (0, 0, 0)
 yellow = (255, 255, 0)
 green = (0, 255, 0)
+navy_blue = (0, 0, 83)
 
 # Screen Size
 screen_width = 800
@@ -22,7 +25,7 @@ screen_height = 500
 gameWindow = pygame.display.set_mode((screen_width, screen_height))
 
 # Game Title
-pygame.display.set_caption('Snakes Game')
+pygame.display.set_caption('The Snakes Game')
 pygame.display.update()
 
 # Some Constants
@@ -39,6 +42,28 @@ def textOnScreen(text, color, pos_x, pos_y):
 def plotSnakeOnScreen(gameWindow, color, snake_list, snake_size):
     for x, y in snake_list:
         pygame.draw.rect(gameWindow, color, [x, y, snake_size, snake_size])
+
+
+# Home Screen
+def homeScreen():
+    exit_home = False
+    while not exit_home:
+        gameWindow.fill(navy_blue)
+        textOnScreen("Welcome to The Snakes Game!!! Press ENTER to continue", yellow, 10, 10)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                exit_home = True
+
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_RETURN:
+                    gameLoop()
+
+                if event.key == pygame.K_ESCAPE:
+                    exit_home = True
+
+        pygame.display.update()
+        clock.tick(fps)
 
 
 # Game Loop
@@ -73,7 +98,7 @@ def gameLoop():
 
         if game_over:
             gameWindow.fill(black)
-            textOnScreen(f"Game Over, Your score is {score}!!! Press Enter to Continue", red, 10, 10)
+            textOnScreen(f"Game Over, Your score is {score}!!! Press ENTER to Continue, or ESC to exit", red, 10, 10)
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -82,6 +107,9 @@ def gameLoop():
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_RETURN:
                         gameLoop()
+
+                    if event.key == pygame.K_ESCAPE:
+                        exit_game = True
 
         else:
             for event in pygame.event.get():
@@ -104,6 +132,9 @@ def gameLoop():
                     if event.key == pygame.K_DOWN and velocity_y == 0:
                         velocity_x = 0
                         velocity_y = initial_velocity
+
+                    if event.key == pygame.K_ESCAPE:
+                        exit_game = True
 
             snake_x += velocity_x
             snake_y += velocity_y
@@ -140,8 +171,9 @@ def gameLoop():
 
         pygame.display.update()
         clock.tick(fps)
-    pygame.quit()
-    quit()
 
 
-gameLoop()
+homeScreen()
+
+pygame.quit()
+quit()
