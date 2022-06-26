@@ -3,6 +3,7 @@ import random
 
 pygame.init()
 
+# Handling High Score if it doesnt exit
 f = open("high_score", "w")
 f.close()
 
