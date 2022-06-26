@@ -57,6 +57,7 @@ def homeScreen():
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_RETURN:
+                    exit_home = True
                     gameLoop()
 
                 if event.key == pygame.K_ESCAPE:
